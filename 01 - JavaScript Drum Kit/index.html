@@ -58,24 +58,33 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
-
-
   function playSound(e) {
-    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
-    if (!audio) return; // stop the fucntion from running all together
-    audio.currentTime = 0; // rewind to the start
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`)
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`)
+    if(!audio) return // exit if not a valid sound file key.
+    audio.currentTime = 0 // rewind to start
     audio.play();
-    key.classList.add('playing');
-  }
-  function removeTransition(e) {
-    if (e.propertyName !== 'transform') return; // skip it if it's not a transform
-    this.classList.remove('playing');
+    key.classList.add('playing')
   }
 
-  const keys = document.querySelectorAll('.key');
-  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
-  window.addEventListener('keydown', playSound);
+  function removeTransition(e) {
+    if(e.propertyName !== 'transform') return // skip if not a transform
+    this.classList.remove('playing')
+  }
+
+  window.addEventListener('keydown', playSound)
+  /* First guess was to add an event listner for keyup and this totally works
+  window.addEventListener('keyup', function(e) {
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`)
+    key.classList.remove('playing')
+  })
+  */
+
+  // wanted to call a forEach but is didn't work against the return type
+  // returned by quesrySelectorAll()
+  for (var key of document.querySelectorAll('.key')) {
+    key.addEventListener('transitionend', removeTransition)
+  }
 
 </script>
 
